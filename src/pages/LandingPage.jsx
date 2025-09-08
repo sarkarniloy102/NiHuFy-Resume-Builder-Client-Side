@@ -1,7 +1,11 @@
+import { useState } from "react";
 import { landingPageStyles } from "../assets/dummystyle";
-import { LayoutTemplate } from 'lucide-react';
+import { LayoutTemplate, Menu, X } from 'lucide-react';
 
 const LandingPage = () => {
+
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
     return (
         <div className={landingPageStyles.container}>
             {/* header */}
@@ -16,7 +20,20 @@ const LandingPage = () => {
                         </span>
 
                     </div>
-
+                    {/* mobile menu button */}
+                    <button
+                        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                        className={landingPageStyles.mobileMenuButton}>
+                        {
+                            mobileMenuOpen ?
+                                <X size={34} className={landingPageStyles.mobileMenuButton} /> :
+                                <Menu size={34} className={landingPageStyles.mobileMenuButton} />
+                        }
+                    </button>
+                    {/* desktop navigation */}
+                    <div className="hidden md:flex items-center">
+                        {}
+                    </div>
                 </div>
 
             </header>
