@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { landingPageStyles } from "../assets/dummystyle";
-import { LayoutTemplate, Menu, X } from 'lucide-react';
+import { ArrowRight, LayoutTemplate, Menu, X } from 'lucide-react';
 import { UserContext } from "../context/userContext";
 import { useNavigate } from "react-router-dom";
 import { ProfileInfoCard } from "../components/Cards";
@@ -9,6 +9,17 @@ const LandingPage = () => {
 
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [openAuthModel, setOpenAuthModel] = useState(false);
+    const [currentPage, setCurrentPage] = useState('login');
+
+    // handle cta
+    const handleCTA = () => {
+        if (!user) {
+            setOpenAuthModel(true);
+        }
+        else {
+            navigate('/dashboard')
+        }
+    }
     const { user } = useContext(UserContext);
     const navigate = useNavigate();
     return (
@@ -87,6 +98,46 @@ const LandingPage = () => {
                     )
                 }
             </header>
+            {/* main content */}
+            <main className={landingPageStyles.main}>
+                <section className={landingPageStyles.heroSection}>
+                    <div className={landingPageStyles.heroGrid}>
+                        {/* Left content */}
+                        <div className={landingPageStyles.heroLeft}>
+                            <div className={landingPageStyles.tagline}>
+                                Modern Resume Builder
+                            </div>
+
+                            <h1 className={landingPageStyles.heading}>
+                                <span className={landingPageStyles.headingText}>  Craft </span>
+                                <span className={landingPageStyles.headingGradient}>Proffessional</span>
+                                <span className={landingPageStyles.headingText}>Resume</span>
+                            </h1>
+
+                            <p className={landingPageStyles.description}>
+                                Turn your experience into opportunity. Smart resume templates, ATS-friendly, and trusted by recruiters
+                            </p>
+
+                            <div className={landingPageStyles.ctaButtons}>
+                                <button onClick={handleCTA}
+                                    className={landingPageStyles.primaryButton}>
+                                    <div className={landingPageStyles.primaryButtonOverlay}></div>
+                                    <span className={landingPageStyles.primaryButtonContent}>Start Building
+                                        <ArrowRight className={landingPageStyles.primaryButtonIcon} size={18} />
+                                    </span>
+
+                                </button>
+
+                                <button onClick={handleCTA} className={landingPageStyles.secondaryButton}>
+                                    View Templates
+                                </button>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+            </main>
         </div>
     );
 };
