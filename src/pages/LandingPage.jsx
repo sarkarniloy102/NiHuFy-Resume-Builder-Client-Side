@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { landingPageStyles } from "../assets/dummystyle";
-import { ArrowRight, LayoutTemplate, Menu, X } from 'lucide-react';
+import { ArrowRight, Download, LayoutTemplate, Menu, X, Zap } from 'lucide-react';
 import { UserContext } from "../context/userContext";
 import { useNavigate } from "react-router-dom";
 import { ProfileInfoCard } from "../components/Cards";
@@ -226,6 +226,58 @@ const LandingPage = () => {
                                     </polygon>
                                 </svg>
                             </div>
+                        </div>
+                    </div>
+                </section>
+                {/* features section */}
+                <section className={landingPageStyles.featuresSection}>
+                    <div className={landingPageStyles.featuresContainer}>
+                        <div className={landingPageStyles.featuresHeader}>
+                            <h2 className={landingPageStyles.featuresTitle}>
+                                Why Choose <span className={landingPageStyles.featuresTitleGradient}>NiHuFy?</span>
+                            </h2>
+                            <p className={landingPageStyles.featuresDescription}>
+                                Everything you need to create a professional resume that stands out
+                            </p>
+                        </div>
+                        <div className={landingPageStyles.featuresGrid}>
+                            {
+                                [
+                                    {
+                                        icon: <Zap className={landingPageStyles.featureIcon} />,
+                                        title: "Lightning Fast",
+                                        description: "Create professional resumes in under 5 minutes with our streamlined process",
+                                        gradient: landingPageStyles.featureIconViolet,
+                                        bg: landingPageStyles.featureCardViolet
+                                    },
+                                    {
+                                        icon: <LayoutTemplate className={landingPageStyles.featureIcon} />,
+                                        title: "Pro Templates",
+                                        description: "Choose from dozens of recruiter-approved, industry-specific templates",
+                                        gradient: landingPageStyles.featureIconFuchsia,
+                                        bg: landingPageStyles.featureCardFuchsia
+                                    },
+                                    {
+                                        icon: <Download className={landingPageStyles.featureIcon} />,
+                                        title: "Instant Export",
+                                        description: "Download high-quality PDFs instantly with perfect formatting",
+                                        gradient: landingPageStyles.featureIconOrange,
+                                        bg: landingPageStyles.featureCardOrange
+                                    }
+                                ].map((feature,idx)=>(
+                                    <div key={idx} className={landingPageStyles.featureCard}>
+                                        <div className={landingPageStyles.featureCardHover}></div>
+                                        <div className={`${landingPageStyles.featureCardContent} ${feature.bg}`}>
+                                            <div className={`${landingPageStyles.featureIconContainer} ${feature.gradient}`}>
+                                                {feature.icon}
+                                            </div>
+                                            <h3 className={landingPageStyles.featureTitle}>{feature.title}</h3>
+                                            <p className={landingPageStyles.featuresDescription}>{feature.description}</p>
+                                        </div>
+                                    </div>
+                                ))
+                            }
+
                         </div>
                     </div>
                 </section>
