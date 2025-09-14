@@ -264,7 +264,7 @@ const LandingPage = () => {
                                         gradient: landingPageStyles.featureIconOrange,
                                         bg: landingPageStyles.featureCardOrange
                                     }
-                                ].map((feature,idx)=>(
+                                ].map((feature, idx) => (
                                     <div key={idx} className={landingPageStyles.featureCard}>
                                         <div className={landingPageStyles.featureCardHover}></div>
                                         <div className={`${landingPageStyles.featureCardContent} ${feature.bg}`}>
@@ -279,6 +279,25 @@ const LandingPage = () => {
                             }
 
                         </div>
+                    </div>
+                </section>
+                {/* CTA section */}
+                <section className={landingPageStyles.ctaSection}>
+                    <div className={landingPageStyles.ctaContainer}>
+                        <div className={landingPageStyles.ctaCard}>
+                            <div className={landingPageStyles.ctaCardBg}></div>
+                            <div className={landingPageStyles.ctaCardContent}>
+                                <h2 className={landingPageStyles.ctaTitle}>Ready to Build Your <span className={landingPageStyles.ctaTitleGradient}></span>StandOut Resume?</h2>
+                                <p className={landingPageStyles.ctaDescription}>Join thousands of professionals who landed their dream jobs with our platform</p>
+                                <button onClick={handleCTA}
+                                    className={landingPageStyles.ctaButton}>
+                                    <div className={landingPageStyles.ctaButtonOverlay}></div>
+                                    <span className={landingPageStyles.ctaButtonText}>Start Building Now</span>
+
+                                </button>
+                            </div>
+                        </div>
+
                     </div>
                 </section>
             </main>
