@@ -301,6 +301,17 @@ const LandingPage = () => {
                     </div>
                 </section>
             </main>
+            {/* footer section */}
+            <footer className={landingPageStyles.footer}>
+                <div className={landingPageStyles.footerContainer}>
+                    <p className={landingPageStyles.footerText}>
+                        Crafted with <span className={landingPageStyles.footerHeart}>❤️</span> by{' '}
+                         <a href="https://sarkarniloy.netlify.app/" target="_blank" className={landingPageStyles.footerLink}>Sarkar Niloy</a>
+                    </p>
+                   
+                </div>
+
+            </footer>
         </div>
     );
 };
