@@ -53,7 +53,7 @@ const SignUp = ({ setCurrentPage }) => {
     return (
         <div className={authStyles.signupContainer}>
             <div className={authStyles.headerWrapper}>
-                <h3 className={authStyles.signupTitle}>Create Account</h3>
+                <h3 className={authStyles.signupTitle}>Create Account Here</h3>
                 <p className={authStyles.signupSubtitle}>Join thousands of professional today </p>
 
             </div>
@@ -80,7 +80,7 @@ const SignUp = ({ setCurrentPage }) => {
                     error && <div className={authStyles.errorMessage}>{error}</div>
 
                 }
-                <button type="submit" className={authStyles.signupSubmit}>Create Account Here</button>
+                <button type="submit" className={authStyles.signupSubmit}>SignUp</button>
 
                 {/* footer */}
                 <p className={authStyles.switchText}>
