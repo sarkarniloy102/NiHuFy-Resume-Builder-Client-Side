@@ -4,12 +4,15 @@ import { ArrowRight, Download, LayoutTemplate, Menu, X, Zap } from 'lucide-react
 import { UserContext } from "../context/userContext";
 import { useNavigate } from "react-router-dom";
 import { ProfileInfoCard } from "../components/Cards";
+import Modal from "../components/Modal";
+import Login from "../components/Login";
+import SignUp from "../components/SignUp";
 
 const LandingPage = () => {
 
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [openAuthModel, setOpenAuthModel] = useState(false);
-    const [currentPage, setCurrentPage] = useState('login');
+    const [currentPage, setCurrentPage] = useState("login");
 
     // handle cta
     const handleCTA = () => {
@@ -306,12 +309,24 @@ const LandingPage = () => {
                 <div className={landingPageStyles.footerContainer}>
                     <p className={landingPageStyles.footerText}>
                         Crafted with <span className={landingPageStyles.footerHeart}>❤️</span> by{' '}
-                         <a href="https://sarkarniloy.netlify.app/" target="_blank" className={landingPageStyles.footerLink}>Sarkar Niloy</a>
+                        <a href="https://sarkarniloy.netlify.app/" target="_blank" className={landingPageStyles.footerLink}>Sarkar Niloy</a>
                     </p>
-                   
+
                 </div>
 
             </footer>
+
+            {/* Modal for login & sign in */}
+            <Modal isOpen={openAuthModel}
+                onClose={() => {
+                    setOpenAuthModel(false)
+                    setCurrentPage("login")
+                }} hideHeader>
+                <div>
+                    {currentPage === "login" && <Login setCurrentPage={setCurrentPage} />}
+                    {currentPage === "signup" && <SignUp setCurrentPage={setCurrentPage} />}
+                </div>
+            </Modal>
         </div>
     );
 };
