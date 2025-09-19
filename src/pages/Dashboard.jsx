@@ -2,9 +2,13 @@ import { useNavigate } from "react-router-dom";
 import { dashboardStyles } from "../assets/dummystyle";
 import DashboardLayout from "../components/DashboardLayout";
 import { useEffect, useState } from "react";
-import { LucideFilePlus } from "lucide-react";
+import { LucideFilePlus, LucideTrash2 } from "lucide-react";
 import axiosInstance from "../utils/axiosInstance";
 import { API_PATHS } from "../utils/apiPaths";
+import { ResumeSummaryCard } from "../components/Cards";
+import toast from "react-hot-toast";
+import moment from "moment";
+import Modal from "../components/Modal";
 import CreateResumeForm from "../components/CreateResumeForm";
 
 
@@ -108,7 +112,33 @@ const Dashboard = () => {
     }
     useEffect(() => {
         fetchAllResumes();
-    }, [])
+    }, []);
+
+    // handle delete
+    const handleDeleteResume = async () => {
+        if (!resumeToDelete) return;
+
+        try {
+            await axiosInstance.delete(API_PATHS.RESUME.DELETE(resumeToDelete))
+            toast.success('Resume Deleted Successfully')
+            fetchAllResumes();
+
+        } catch (error) {
+            console.error('Error deleting resume:', error)
+            toast.error('failed to delete resume')
+        }
+        finally {
+            setResumeToDelete(null);
+            showDeleteConfirm(false)
+        }
+    }
+
+    // handle delete click
+    const handleDeleteClick = (id) => {
+        setResumeToDelete(id);
+        setShowDeleteConfirm(true);
+    }
+
     return (
         <DashboardLayout>
             <div className={dashboardStyles.container}>
@@ -183,13 +213,59 @@ const Dashboard = () => {
 
                             {
                                 allResumes.map((resume) => (
-                                    <CreateResumeForm resume={resume} />
+                                    <ResumeSummaryCard
+                                        key={resume._id}
+                                        imgUrl={resume.thumbnailLink}
+                                        title={resume.title}
+                                        createdAt={resume.createdAt}
+                                        updatedAt={resume.updatedAt}
+                                        onSelect={() => navigate(`/resume/${resume._id}`)}
+                                        onDelete={() => handleDeleteClick(resume._id)}
+                                        completion={resume.completion || 0}
+                                        isPremium={resume.isPremium}
+                                        isNew={moment().diff(moment(resume.createdAt), 'days') < 7} />
                                 ))
                             }
                         </div>
                     )
                 }
             </div>
+            {/* create modal */}
+            <Modal isOpen={openCreateModal}
+                onClose={() => setOpenCreateModal(false)}
+                hideHeader maxWidth="max-w-2xl">
+                <div className="p-6">
+                    <div className={dashboardStyles.modalHeader}>
+                        <h3 className={dashboardStyles.modalTitle}>Create New Resume</h3>
+
+                        <button onClick={() => setOpenCreateModal(false)}
+                            className={dashboardStyles.modalCloseButton}> X </button>
+                    </div>
+                    <CreateResumeForm onSuccess={() => {
+                        setOpenCreateModal(false);
+                        fetchAllResumes();
+                    }} />
+
+                </div>
+            </Modal>
+
+            {/* delete modal */}
+            <Modal isOpen={showDeleteConfirm}
+                onClose={() => { setShowDeleteConfirm(false) }}
+                title='Confirm Deletion'
+                showActionBtn actionBtnText='Delete' actionBtnClassName='bg-red-600 hover:bg-red-700'
+                onActionClick={handleDeleteResume}>
+
+                <div className="p-4">
+                    <div className="flex flex-col items-center text-center">
+                        <div className={dashboardStyles.deleteIconWrapper}>
+                            <LucideTrash2 className="text-orange-600 " size={24} />
+                        </div>
+                        <h3 className={dashboardStyles.deleteTitle}>Delete Resume?</h3>
+                        <p className={dashboardStyles.deleteText}>Are you sure you want to delete this resume?</p>
+                    </div>
+                </div>
+            </Modal>
         </DashboardLayout>
     );
 };
