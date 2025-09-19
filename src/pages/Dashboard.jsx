@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { LucideFilePlus } from "lucide-react";
 import axiosInstance from "../utils/axiosInstance";
 import { API_PATHS } from "../utils/apiPaths";
+import CreateResumeForm from "../components/CreateResumeForm";
 
 
 const Dashboard = () => {
@@ -154,6 +155,37 @@ const Dashboard = () => {
                             <h3 className={dashboardStyles.emptyTitle}>No Resumes Yet</h3>
                             <p className={dashboardStyles.emptyText}>You haven't created any resumes yet. Start building your professional resume to land your dream job.</p>
 
+                            <button className={dashboardStyles.createButton}
+                                onClick={() => setOpenCreateModal(true)}>
+                                <div className={dashboardStyles.createButtonOverlay}></div>
+                                <span className={dashboardStyles.createButtonContent}>
+                                    Create Your First Resume
+                                    <LucideFilePlus className="group-hover:translate-x-1 transition-transform" size={20} />
+                                </span>
+                            </button>
+
+                        </div>
+                    )
+                }
+                {/* grid view */}
+                {
+                    !loading && allResumes.length > 0 && (
+                        <div className={dashboardStyles.grid}>
+                            <div className={dashboardStyles.newResumeCard}
+                                onClick={() => setOpenCreateModal(true)}>
+                                <div className={dashboardStyles.newResumeIcon}>
+                                    <LucideFilePlus className="text-white" size={32} />
+                                </div>
+                                <h3 className={dashboardStyles.newResumeTitle}>Create New Resume</h3>
+                                <p className={dashboardStyles.newResumeText}>Start Building Your Career</p>
+
+                            </div>
+
+                            {
+                                allResumes.map((resume) => (
+                                    <CreateResumeForm resume={resume} />
+                                ))
+                            }
                         </div>
                     )
                 }
