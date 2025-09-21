@@ -19,15 +19,15 @@ export const Input = ({ value, onChange, label, placeholder, type = 'text' }) =>
                     onChange={onChange}
                     onFocus={() => setIsFocused(true)}
                     onBlur={() => setIsFocused(false)} />
-                    {
-                        type==='password' && (
-                            <button type="button"
-                            onClick={()=>setShowPassword(!showPassword)}
+                {
+                    type === 'password' && (
+                        <button type="button"
+                            onClick={() => setShowPassword(!showPassword)}
                             className={inputStyles.toggleButton}>
-                                {showPassword ? <EyeOff size={20}/> : <Eye size={20}/>}
-                            </button>
-                        )
-                    }
+                            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                        </button>
+                    )
+                }
 
             </div>
 
