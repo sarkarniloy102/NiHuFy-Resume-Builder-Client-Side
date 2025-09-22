@@ -129,7 +129,7 @@ const Dashboard = () => {
         }
         finally {
             setResumeToDelete(null);
-            showDeleteConfirm(false)
+            setShowDeleteConfirm(false)
         }
     }
 
