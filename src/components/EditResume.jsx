@@ -9,6 +9,7 @@ import { API_PATHS } from "../utils/apiPaths";
 import toast from "react-hot-toast";
 import { fixTailwindColors } from "../utils/color";
 import html2pdf from "html2pdf.js";
+import html2canvas from "html2canvas";
 
 // resize observer hook
 const useResizeObserver = () => {
@@ -195,17 +196,21 @@ const EditResume = () => {
 
         switch (currentPage) {
             case "profile-info":
-                const { fullName, designation, summary } = resumeData.profileInfo
-                if (!fullName.trim()) errors.push("Full Name is required")
-                if (!designation.trim()) errors.push("Designation is required")
-                if (!summary.trim()) errors.push("Summary is required")
-                break
+                {
+                    const { fullName, designation, summary } = resumeData.profileInfo
+                    if (!fullName.trim()) errors.push("Full Name is required")
+                    if (!designation.trim()) errors.push("Designation is required")
+                    if (!summary.trim()) errors.push("Summary is required")
+                    break
+                }
 
             case "contact-info":
-                const { email, phone } = resumeData.contactInfo
-                if (!email.trim() || !/^\S+@\S+\.\S+$/.test(email)) errors.push("Valid email is required.")
-                if (!phone.trim() || !/^\d{10}$/.test(phone)) errors.push("Valid 10-digit phone number is required")
-                break
+                {
+                    const { email, phone } = resumeData.contactInfo
+                    if (!email.trim() || !/^\S+@\S+\.\S+$/.test(email)) errors.push("Valid email is required.")
+                    if (!phone.trim() || !/^\d{10}$/.test(phone)) errors.push("Valid 10-digit phone number is required")
+                    break
+                }
 
             case "work-experience":
                 resumeData.workExperience.forEach(({ company, role, startDate, endDate }, index) => {
@@ -267,6 +272,7 @@ const EditResume = () => {
         goToNextStep()
     }
 
+    //  to go next state
     const goToNextStep = () => {
         const pages = [
             "profile-info",
@@ -463,22 +469,6 @@ const EditResume = () => {
             }
         })
     }
-
-    // delete function to delete any resume
-    const handleDeleteResume = async () => {
-        try {
-            setIsLoading(true)
-            await axiosInstance.delete(API_PATHS.RESUME.DELETE(resumeId))
-            toast.success("Resume deleted successfully")
-            navigate("/dashboard")
-        } catch (error) {
-            console.error("Error deleting resume:", error)
-            toast.error("Failed to delete resume")
-        } finally {
-            setIsLoading(false)
-        }
-    }
-
     // fetching the resume details using backend url
     const fetchResumeDetailsById = async () => {
         try {
@@ -507,7 +497,7 @@ const EditResume = () => {
             toast.error("Failed to load resume data")
         }
     }
-    // it will help in choosing the preview as well as helps in downloding the resume
+    // updating resume image
     const uploadResumeImages = async () => {
         try {
             setIsLoading(true)
@@ -557,6 +547,121 @@ const EditResume = () => {
             setIsLoading(false)
         }
     }
+    // updating resume details
+    const updateResumeDetails = async (thumbnailLink) => {
+        try {
+            setIsLoading(true)
+
+            await axiosInstance.put(API_PATHS.RESUME.UPDATE(resumeId), {
+                ...resumeData,
+                thumbnailLink: thumbnailLink || "",
+                completion: completionPercentage,
+            })
+        } catch (err) {
+            console.error("Error updating resume:", err)
+            toast.error("Failed to update resume details")
+        } finally {
+            setIsLoading(false)
+        }
+    }
+    // delete function to delete any resume
+    const handleDeleteResume = async () => {
+        try {
+            setIsLoading(true)
+            await axiosInstance.delete(API_PATHS.RESUME.DELETE(resumeId))
+            toast.success("Resume deleted successfully")
+            navigate("/dashboard")
+        } catch (error) {
+            console.error("Error deleting resume:", error)
+            toast.error("Failed to delete resume")
+        } finally {
+            setIsLoading(false)
+        }
+    }
+    // to download pdf
+    const downloadPDF = async () => {
+        const element = resumeDownloadRef.current;
+        if (!element) {
+            toast.error("Failed to generate PDF. Please try again.");
+            return;
+        }
+
+        setIsDownloading(true);
+        setDownloadSuccess(false);
+        const toastId = toast.loading("Generating PDFâ€¦");
+
+        const override = document.createElement("style");
+        override.id = "__pdf_color_override__";
+        override.textContent = `
+      * {
+        color: #000 !important;
+        background-color: #fff !important;
+        border-color: #000 !important;
+      }
+    `;
+        document.head.appendChild(override);
+
+        // type of how it will look after download
+
+        try {
+            await html2pdf()
+                .set({
+                    margin: 0,
+                    filename: `${resumeData.title.replace(/[^a-z0-9]/gi, "_")}.pdf`,
+                    image: { type: "png", quality: 1.0 },
+                    html2canvas: {
+                        scale: 2,
+                        useCORS: true,
+                        backgroundColor: "#FFFFFF",
+                        logging: false,
+                        windowWidth: element.scrollWidth,
+                    },
+                    jsPDF: {
+                        unit: "mm",
+                        format: "a4",
+                        orientation: "portrait",
+                    },
+                    pagebreak: {
+                        mode: ['avoid-all', 'css', 'legacy']
+                    }
+                })
+                .from(element)
+                .save();
+
+            toast.success("PDF downloaded successfully!", { id: toastId });
+            setDownloadSuccess(true);
+            setTimeout(() => setDownloadSuccess(false), 3000);
+
+        } catch (err) {
+            console.error("PDF error:", err);
+            toast.error(`Failed to generate PDF: ${err.message}`, { id: toastId });
+
+        } finally {
+            document.getElementById("__pdf_color_override__")?.remove();
+            setIsDownloading(false);
+        }
+    };
+
+    // theme selector function
+    const updateTheme = (theme) => {
+        setResumeData(prev => ({
+            ...prev,
+            template: {
+                theme: theme,
+                colorPalette: []
+            }
+        }));
+    }
+
+    useEffect(() => {
+        if (resumeId) {
+            fetchResumeDetailsById()
+        }
+    }, [resumeId])
+
+
+    // it will help in choosing the preview as well as helps in downloding the resume
+
 
 
     return (
