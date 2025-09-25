@@ -17,6 +17,8 @@ export const ActionLink = ({ icon, link, bgColor }) => (
     </div>
 );
 
+// certificate section
+
 export const CertificationInfo = ({ title, issuer, year, bgColor }) => (
     <div className={styles.certContainer}>
         <h3 className={styles.certTitle}>{title}</h3>
@@ -27,12 +29,18 @@ export const CertificationInfo = ({ title, issuer, year, bgColor }) => (
     </div>
 );
 
+
+
+// contact section
+
 export const ContactInfo = ({ icon, iconBG, value }) => (
     <div className={styles.contactRow}>
         <div className={styles.contactIconWrapper} style={{ backgroundColor: iconBG }}>{icon}</div>
         <p className={styles.contactText}>{value}</p>
     </div>
 );
+
+// education section 
 
 export const EducationInfo = ({ degree, institution, duration }) => (
     <div className={styles.eduContainer}>
@@ -49,6 +57,7 @@ const InfoBlock = ({ label, progress, accentColor }) => (
     </div>
 );
 
+// language section
 export const LanguageSection = ({ languages, accentColor }) => (
     <div>
         {languages.map((lang, idx) => (
@@ -57,6 +66,8 @@ export const LanguageSection = ({ languages, accentColor }) => (
     </div>
 );
 
+// skill section
+
 export const SkillSection = ({ skills, accentColor }) => (
     <div className={styles.skillGrid}>
         {skills.map((skill, idx) => (
@@ -64,6 +75,8 @@ export const SkillSection = ({ skills, accentColor }) => (
         ))}
     </div>
 );
+
+// project info section
 
 export const ProjectInfo = ({ title, description, githubLink, liveDemoUrl, isPreview }) => (
     <div className={styles.projectContainer}>
@@ -84,6 +97,8 @@ export const ProjectInfo = ({ title, description, githubLink, liveDemoUrl, isPre
     </div>
 );
 
+// rating section
+
 export const RatingInput = ({ value = 0, total = 5, onChange = () => { }, color = '#10b981', bgColor = '#e5e7eb' }) => {
     const displayValue = Math.round((value / 100) * total);
     return (
@@ -100,6 +115,7 @@ export const RatingInput = ({ value = 0, total = 5, onChange = () => { }, color 
     );
 };
 
+// work experience section
 export const WorkExperience = ({ company, role, duration, durationColor, description }) => (
     <div className={styles.workContainer}>
         <div className={styles.workHeader}>
