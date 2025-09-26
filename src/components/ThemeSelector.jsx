@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { resumeTemplates } from "../utils/data";
 import Tabs from "./Tabs";
 import { Check } from "lucide-react";
+import { TemplateCard } from "./Cards";
 
 
 const TAB_DATA = [{ label: 'Templates' }]
@@ -40,15 +41,27 @@ const ThemeSelector = ({ selectedTheme, setSelectedTheme, resumeData, onClose })
                 <button
                     onClick={handleThemeSelection} className="w-full sm:w-auto flex items-center justify-center gap-3 px-6 py-3 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white font-black rounded-2xl hover:scale-105 transition-all shadow-lg hover:shadow-xl">
                     <Check size={18} /> Apply & Close
-               
+
                 </button>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-8">
                 <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-100 p-4 sm:p-6">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-[60vh] lg:max-h-[70vh] overflow-auto p-2">
+                        {
+                            resumeTemplates.map((template, idx) => (
+                                <TemplateCard key={`template_${idx}`}
+                                    thumbnailImg={template.thumbnailImg}
+                                    isSelected={selectedTemplate.idx === idx}
+                                    onSelect={() => setSelectedTemplate({
+                                        theme: template.id,
+                                        idx
+                                    })} />
+                            ))
+                        }
 
                     </div>
                 </div>
+                {/* Right Area */}
             </div>
         </div>
     );
