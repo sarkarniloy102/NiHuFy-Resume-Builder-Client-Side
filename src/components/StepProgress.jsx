@@ -1,3 +1,4 @@
+import { Check } from "lucide-react";
 import { shimmerStyle } from "../assets/dummystyle";
 
 const StepProgress = ({ progress }) => {
@@ -26,8 +27,48 @@ const StepProgress = ({ progress }) => {
                                     }}></div>
                             ))
                         }
+                    </div>
+
+                    {/* particle effects */}
+                    <div className="absolute inset-0 ">
+                        {
+                            [...Array(12)].map((_, i) => (
+                                <div key={i}
+                                    className="absolute w-1 h-1 bg-white/60 rounded-full "
+                                    style={{
+                                        left: `${Math.random() * 100}%`,
+                                        top: `${Math.random() * 100}%`,
+                                        animationDelay: `${Math.random() * 2}s`,
+                                    }}></div>
+                            ))
+                        }
+                    </div>
+                </div>
+                {progress > 0 && (
+                    <div className="absolute top-0 h-full w-8 bg-gradient-to-r from-transparent via-white/60 to-white/30 blur-sm"
+                        style={{ left: `${Math.max(0, progress - 4)}%` }}>
 
                     </div>
+                )}
+            </div>
+            {/*  */}
+            <div className="flex justify-between items-center mt-3">
+                <div className="text-xs font-bold text-white/60">
+                    {
+                        progress < 25 ? "Getting Started"
+                            : progress < 50 ? "Making Progress"
+                                : progress < 75 ? "More than Halfway"
+                                    : "Almost There"
+                    }
+                </div>
+                <div className="flex items-center gap-2">
+                    {
+                        progress === 100 && (
+                            <div className="w-6 h-6 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center">
+                                <Check size={12} className="text-white"/>
+                            </div>
+                        )
+                    }
                 </div>
             </div>
         </>
