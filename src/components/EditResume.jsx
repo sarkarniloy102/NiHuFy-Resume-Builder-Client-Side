@@ -3,7 +3,7 @@ import { buttonStyles, containerStyles, iconStyles, statusStyles, } from "../ass
 import DashboardLayout from "./DashboardLayout";
 import { useNavigate, useParams } from "react-router-dom";
 import { TitleInput } from "./Inputs";
-import { AlertCircle, ArrowLeft, Download, Loader2, Palette, Save, Trash2 } from "lucide-react";
+import { AlertCircle,Check, ArrowLeft, Download, Loader2, Palette, Save, Trash2 } from "lucide-react";
 import axiosInstance from "../utils/axiosInstance";
 import { API_PATHS } from "../utils/apiPaths";
 import toast from "react-hot-toast";
@@ -15,6 +15,7 @@ import { AdditionalInfoForm, CertificationInfoForm, ContactInfoForm, EducationDe
 import RenderResume from "./RenderResume";
 import Modal from "./Modal";
 import ThemeSelector from "./ThemeSelector";
+import { dataURLtoFile } from "../utils/helper";
 
 // resize observer hook
 const useResizeObserver = () => {
@@ -196,7 +197,7 @@ const EditResume = () => {
     }, [resumeData]);
 
     // Validate Inputs
-    const validateAndNext = (e) => {
+    const validateAndNext = () => {
         const errors = []
 
         switch (currentPage) {
@@ -810,19 +811,26 @@ const EditResume = () => {
                     <div className={containerStyles.pdfPreview}  >
                         <div ref={resumeDownloadRef} className="a4-wrapper">
                             <div className="w-full h-full">
-                                <RenderResume key={`pdf-${resumeData?.template?.theme}`} 
-                                templateId={resumeData?.template?.theme || ""}
-                                resumeData={resumeData}
-                                containerWidth={null}/>
-
+                                <RenderResume key={`pdf-${resumeData?.template?.theme}`}
+                                    templateId={resumeData?.template?.theme || ""}
+                                    resumeData={resumeData}
+                                    containerWidth={null} />
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
             </Modal>
+
+            {/* handling thumbnail issue */}
+            <div style={{ display: "none" }} ref={thumbnailRef}>
+                <div className={containerStyles.hiddenThumbnail}>
+                    <RenderResume key={`thumb-${resumeData?.template?.theme}`}
+                        templateId={resumeData?.template?.theme || ""}
+                        resumeData={resumeData} />
+
+                </div>
+
+            </div>
         </DashboardLayout>
     );
 };
