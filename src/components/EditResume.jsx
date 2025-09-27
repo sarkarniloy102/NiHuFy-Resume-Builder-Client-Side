@@ -13,6 +13,8 @@ import html2canvas from "html2canvas";
 import StepProgress from "./StepProgress";
 import { AdditionalInfoForm, CertificationInfoForm, ContactInfoForm, EducationDetailsForm, ProfileInfoForm, ProjectDetailForm, SkillsInfoForm, WorkExperienceForm } from "./Forms";
 import RenderResume from "./RenderResume";
+import Modal from "./Modal";
+import ThemeSelector from "./ThemeSelector";
 
 // resize observer hook
 const useResizeObserver = () => {
@@ -767,8 +769,60 @@ const EditResume = () => {
                     </div>
 
                 </div>
-
             </div>
+
+            {/* modal data */}
+            {/* 1 */}
+            <Modal
+                isOpen={openThemeSelector}
+                onClose={() => setOpenThemeSelector(false)}
+                title="Change Title" >
+                <div className={containerStyles.modalContent}>
+                    <ThemeSelector selectedTheme={resumeData?.template?.theme}
+                        setSelectedTheme={updateTheme} onClose={() => setOpenThemeSelector(false)} />
+                </div>
+            </Modal>
+
+            {/* 2 */}
+            <Modal isOpen={openPreviewModal} onClose={() => setOpenPreviewModal(false)}
+                title={resumeData.title}
+                showActionBtn
+                actionBtnText={isDownloading ? "Generating..." : downloadSuccess ? "Downloaded" : "Download PDF"}
+                actionBtnIcon={
+                    isDownloading ? (
+                        <Loader2 size={16} className="animate-spin" />
+                    ) : downloadSuccess ? (
+                        <Check size={16} className="text-white" />
+                    ) : (
+                        <Download size={16} />
+                    )
+                }
+                onActionClick={downloadPDF}>
+                <div className="relative">
+                    <div className="text-center mb-4">
+                        <div className={statusStyles.modalBadge}>
+                            <div className={iconStyles.pulseDot}></div>
+                            <span>Completion: {completionPercentage}%</span>
+
+                        </div>
+                    </div>
+                    {/*  */}
+                    <div className={containerStyles.pdfPreview}  >
+                        <div ref={resumeDownloadRef} className="a4-wrapper">
+                            <div className="w-full h-full">
+                                <RenderResume key={`pdf-${resumeData?.template?.theme}`} 
+                                templateId={resumeData?.template?.theme || ""}
+                                resumeData={resumeData}
+                                containerWidth={null}/>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </Modal>
         </DashboardLayout>
     );
 };
