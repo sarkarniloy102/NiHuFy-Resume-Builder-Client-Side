@@ -12,6 +12,7 @@ import html2pdf from "html2pdf.js";
 import html2canvas from "html2canvas";
 import StepProgress from "./StepProgress";
 import { AdditionalInfoForm, CertificationInfoForm, ContactInfoForm, EducationDetailsForm, ProfileInfoForm, ProjectDetailForm, SkillsInfoForm, WorkExperienceForm } from "./Forms";
+import RenderResume from "./RenderResume";
 
 // resize observer hook
 const useResizeObserver = () => {
@@ -750,7 +751,14 @@ const EditResume = () => {
                                 </div>
                             </div>
                             {/*  */}
-                            <div className="preview-container" >
+                            <div className="preview-container relative" ref={previewContainerRef} >
+                                <div className={containerStyles.previewInner}>
+                                    <RenderResume key={`preview-${resumeData?.template?.theme}`}
+                                        templateId={resumeData?.template?.theme || ""}
+                                        resumeData={resumeData}
+                                        containerWidth={previewWidth} />
+
+                                </div>
 
                             </div>
 
