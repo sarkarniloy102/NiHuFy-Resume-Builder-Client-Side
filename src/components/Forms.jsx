@@ -532,7 +532,7 @@ export const WorkExperienceForm = ({ workExperience, updateArrayItem, addArrayIt
                         )}
                     </div>
                 ))}
- 
+
                 <button
                     type="button"
                     className={`${commonStyles.addButtonBase} ${workExperienceStyles.addButton}`}

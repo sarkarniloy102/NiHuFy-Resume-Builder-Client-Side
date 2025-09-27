@@ -1,15 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { buttonStyles, containerStyles, } from "../assets/dummystyle";
+import { buttonStyles, containerStyles, iconStyles, statusStyles, } from "../assets/dummystyle";
 import DashboardLayout from "./DashboardLayout";
 import { useNavigate, useParams } from "react-router-dom";
 import { TitleInput } from "./Inputs";
-import { Download, Palette, Trash2 } from "lucide-react";
+import { AlertCircle, ArrowLeft, Download, Loader2, Palette, Save, Trash2 } from "lucide-react";
 import axiosInstance from "../utils/axiosInstance";
 import { API_PATHS } from "../utils/apiPaths";
 import toast from "react-hot-toast";
 import { fixTailwindColors } from "../utils/color";
 import html2pdf from "html2pdf.js";
 import html2canvas from "html2canvas";
+import StepProgress from "./StepProgress";
+import { AdditionalInfoForm, CertificationInfoForm, ContactInfoForm, EducationDetailsForm, ProfileInfoForm, ProjectDetailForm, SkillsInfoForm, WorkExperienceForm } from "./Forms";
 
 // resize observer hook
 const useResizeObserver = () => {
@@ -697,6 +699,65 @@ const EditResume = () => {
                             <span className="text-sm">Preview</span>
                         </button>
                     </div>
+                </div>
+
+                {/* step progress  */}
+                <div className={containerStyles.grid}>
+                    {/*  */}
+                    <div className={containerStyles.formContainer}>
+                        <StepProgress progress={progress} />
+                        {renderForm()}
+                        <div className="p-4 sm:p-6">
+                            {
+                                errorMsg && (
+                                    <div className={statusStyles.error}>
+                                        <AlertCircle size={16} /> {errorMsg}
+                                    </div>
+                                )
+                            }
+                            <div className="flex flex-wrap items-center justify-end gap-3">
+                                <button className={buttonStyles.back} onClick={goBack} disabled={isLoading}>
+                                    <ArrowLeft size={16} />
+                                    Back
+                                </button>
+                                {/*  */}
+                                <button className={buttonStyles.save} onClick={uploadResumeImages} disabled={isLoading}>
+                                    {isLoading ? <Loader2 size={16} className="animate-spin" />
+                                        : <Save size={16} />}
+                                    {
+                                        isLoading ? "Saving..." : "Save & Exit"
+                                    }
+                                </button>
+
+                                {/* next button */}
+                                <button className={buttonStyles.next} onClick={validateAndNext} disabled={isLoading}>
+                                    {currentPage === "additionalInfo" && <Download size={16} />}
+                                    {currentPage === "additionalInfo" ? "Preview & Download" : "Next"}
+                                    {currentPage === "additionalInfo" && <ArrowLeft size={16} className="rotate-180" />}
+
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {/*  */}
+                    <div className="hidden lg:block">
+                        <div className={containerStyles.previewContainer}>
+                            <div className="text-center mb-4">
+                                <div className={statusStyles.completionBadge}>
+                                    <div className={iconStyles.pulseDot}>
+                                    </div>
+                                    <span>Preview - {completionPercentage}% Completed</span>
+                                </div>
+                            </div>
+                            {/*  */}
+                            <div className="preview-container" >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
                 </div>
 
             </div>
